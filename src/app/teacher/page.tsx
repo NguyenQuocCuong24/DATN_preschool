@@ -1,12 +1,13 @@
 "use client"
 import CreateButton from "@/src/components/button/createButton";
 import http from "@/src/request/httpConfig";
-import { Form, Input, Modal } from "antd";
+import { Form } from "antd";
 import { useEffect, useState } from "react";
 import LeftMenu from "../../components/sidebar/leftMenu";
 import { Customer } from "../../request/model";
 import { CustomerResponse } from "../../request/reponseType";
-import TeacherTable from "./TeacherTable";
+import ModalForm from "./ModalForm";
+import TeacherCard from "./TeacherCard";
 
 export default function Teacher() {
     const [teacher, setTeacher] = useState<Customer[]>([]);
@@ -38,34 +39,24 @@ export default function Teacher() {
       });
   };
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
         <LeftMenu />
-        <div className="flex-1 px-24 py-4">
+        <div className="flex-1 px-24 py-4 overflow-y-auto">
             <div className="text-large-bold">Giáo viên</div>
-            <CreateButton onClick={() => setIsModalOpen(true)}/>
-            <div className="pt-8">
-              {teacher && <TeacherTable isReload={isReload} setIsReload={setIsReload} originData={teacher}/>}
+            <div className="flex justify-between">
+              <div></div>
+              <CreateButton onClick={() => setIsModalOpen(true)}/>
             </div>
-            <Modal
-                title="Thêm mới giáo viên"
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={() => setIsModalOpen(false)}
-                okText="Tạo"
-                cancelText="Hủy"
-            >
-                <Form form={form} layout="vertical">
-                  <Form.Item name="fullName" label="Tên giáo viên" rules={[{ required: true, message: "Vui lòng nhập tên lớp học" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="mobile" label="Số điện thoại" rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="avatarUrl" label="Ảnh đại diện" rules={[{ required: false, message: "Vui lòng nhập tên lớp học" }]}>
-                      <Input />
-                  </Form.Item>
-                </Form>
-            </Modal>
+            <div className="mt-8 w-full bg-white px-4 py-6">
+              <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {teacher && teacher.map((value, key) => {
+                  return(
+                    <TeacherCard key={key} teacher={value} isReload={isReload} setIsReload={setIsReload}/>
+                  )
+                })}
+              </div>
+            </div>
+            <ModalForm title={"Thêm mới giáo viên"} confirmText={"Tạo"} handleOk={handleOk} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} />
         </div>
 
         

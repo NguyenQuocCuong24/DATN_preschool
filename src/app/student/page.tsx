@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import LeftMenu from "../../components/sidebar/leftMenu";
 import { ClassType, Customer } from "../../request/model";
 import { ClassResponse, CustomerResponse } from "../../request/reponseType";
-import CustomTable from "./TeacherTable";
+import CustomTable from "./StudentTable";
 import FilterBox from "./filterBox";
+import ModalForm from "./ModalForm";
 
 export default function Teacher() {
     const [student, setStudent] = useState<Customer[]>([]);
@@ -56,67 +57,24 @@ export default function Teacher() {
       });
   };
 
-  const onChangeSelectClass = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-  
-  const onSearchSelectClass = (value: string) => {
-    console.log('search:', value);
-  };
-
-  console.log("classes: ", classes);
-  
   return (
-    <div className="flex">
+    <div className="flex h-screen overflow-hidden">
         <LeftMenu />
-        <div className="flex-1 px-24 py-4">
+        <div className="flex-1 px-24 py-4 overflow-y-auto">
             <div className="text-large-bold">Danh sách học sinh</div>
             <div className="flex justify-between pt-4">
-              {classes && classId && <FilterBox classes={classes} classId={classId} setClassId={setClassId}/>}
+              <div className="flex">
+                <div className="pr-4 pt-1">Chọn lớp học: </div>
+                {classes && classId && <FilterBox classes={classes} classId={classId} setClassId={setClassId}/>}
+              </div>
               <CreateButton onClick={() => setIsModalOpen(true)}/>
             </div>
             <div className="pt-8">
-              {student && <CustomTable loading={loading} isReload={isReload} setIsReload={setIsReload} originData={student}/>}
+              {student && classId && <CustomTable loading={loading} isReload={isReload} setIsReload={setIsReload} originData={student} classes={classes} classId={classId}/>}
             </div>
-            {classId && <Modal
-                title="Thêm mới học sinh"
-                open={isModalOpen}
-                onOk={handleOk}
-                onCancel={() => setIsModalOpen(false)}
-                okText="Tạo"
-                cancelText="Hủy"
-            >
-                <Form form={form} layout="vertical">
-                  <Form.Item name="fullName" label="Tên học sinh" rules={[{ required: true, message: "Vui lòng nhập tên lớp học" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="mobile" label="Số điện thoại" rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="avatarUrl" label="Ảnh đại diện" rules={[{ required: false, message: "Vui lòng nhập tên lớp học" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="classId" label="Chọn lớp học" rules={[{ required: true, message: "Vui lòng chọn lớp học" }]}>
-                  <Select
-                      showSearch
-                      placeholder="Chọn lớp học"
-                      optionFilterProp="label"
-                      onChange={onChangeSelectClass}
-                      onSearch={onSearchSelectClass}
-                      filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                      }
-                      options={classes.map(item => ({
-                        value: item.id,
-                        label: item.name
-                      }))}
-                    />
-                  </Form.Item>
-                </Form>
-            </Modal>}
+            {classId && <ModalForm title={"Thêm mới học sinh"} confirmText={"Tạo"} handleOk={handleOk}
+               isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} classes={classes} />}
         </div>
-
-        
     </div>
   );
 }

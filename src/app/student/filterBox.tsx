@@ -13,6 +13,7 @@ const FilterBox = (props : FilterBoxProps) => {
     return (
         <div>
             <Select
+                className='w-48'
                 showSearch
                 placeholder="Chọn lớp học"
                 optionFilterProp="label"

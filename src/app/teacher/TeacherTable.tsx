@@ -3,7 +3,6 @@ import http from '@/src/request/httpConfig';
 import type { TableProps } from 'antd';
 import { Form, Input, InputNumber, Modal, Popconfirm, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 import { Customer } from '../../request/model';
 
 
@@ -212,7 +211,6 @@ const TeacherTable = (props: TeacherTableProps) => {
   return (
     <div>
       <Form form={form} component={false}>
-        <ToastContainer />
         <Table<Customer>
           components={{
             body: { cell: EditableCell },
