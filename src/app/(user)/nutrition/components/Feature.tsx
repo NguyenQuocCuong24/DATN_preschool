@@ -3,11 +3,11 @@ import React from 'react';
 
 export default function Feature() {
     const features = [
-        "Dễ dàng theo dõi thông tin học tập, thông tin cân đo hàng tháng, hàng quý của tất cả các bé. Hỗ trợ từng lớp nhập thông tin cân đo dễ dàng.",
-        "Tự động đánh giá tình trạng sức khỏe → Dự báo tình trạng sức khỏe của bé để nhà trường có chế độ ăn hợp lý riêng cho bé.",
-        "Hỗ trợ in các mẫu báo cáo theo từng tình trạng nhẹ cân, thấp còi, thừa cân béo phì… theo từng lớp hoặc từng trường.",
-        "Hỗ trợ gửi thông tin cân đo bằng phân hệ tin nhắn đến số điện thoại phụ huynh học sinh.",
-        "Hỗ trợ xuất danh sách excel theo nhiều tiêu chí lọc → Phục vụ trong công tác phổ cập mầm non.",
+        "Hỗ trợ cân đối khẩu phần dinh dưỡng hàng ngày chính xác, khoa học.",
+        "In Phiếu kê chợ giúp đặt hàng thực phẩm hằng ngày một cách nhanh chóng.",
+        "Phiếu tiếp phẩm 3 bước và phiếu lưu hủy mẫu hằng ngày ( mẫu của sở y tế).",
+        "Lập bảng điều tra thực tế sau khi đi chợ → Hỗ trợ tính tiền chợ nhanh.",
+        "Quản lý kho → hỗ trợ in phiếu nhập kho, phiếu xuất kho, thẻ kho, tổng hợp thẻ kho.",
     ];
 
     return (
@@ -30,7 +30,7 @@ export default function Feature() {
             <div className="flex bg-white border rounded-md shadow-md">
                 <div className="w-1/3 p-6 flex justify-center items-center">
                     <Image
-                        src="/assets/images/growthchart.png"
+                        src="/assets/images/foodkids.png"
                         alt="Biểu đồ tăng trưởng"
                         width={250}
                         height={250}
