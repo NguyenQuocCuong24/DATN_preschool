@@ -4,7 +4,7 @@ import React from 'react';
 export default function Banner() {
     return (
         <div className='mb-20'>
-            <div className="relative w-full h-[200px]">
+            <div className="relative w-full h-[200px] mb-20">
                 {/* Background image */}
                 <Image
                     src="/assets/images/bg_intro.png"
@@ -18,20 +18,20 @@ export default function Banner() {
                     <div className="container pt-7 mt-7 mx-auto px-4 h-full flex flex-col justify-center items-center md:items-start md:flex-row md:justify-between">
                         {/* Title center on mobile, left on desktop */}
                         <div className="text-center md:text-left">
-                            <h1 className="text-3xl md:text-4xl font-bold">QUẢN LÝ HỌC SINH</h1>
-                            <p className="text-xl mt-2">GrowthChart 2.0</p>
+                            <h1 className="text-3xl md:text-4xl font-bold">Quản lý thu chi</h1>
+                            <p className="text-xl mt-2">GrowthChart 3.0</p>
                         </div>
 
                         {/* Icon + subtitle: below title on mobile, right on desktop */}
                         <div className="mt-6 md:mt-0 flex flex-col items-center">
                             <Image
-                                src="/assets/icons/ico_growthchart_white.png"
+                                src="/assets/icons/ico_income_white.png"
                                 alt="Child Icon"
-                                width={60}
+                                width={100}
                                 height={60}
                             />
                             <div className="mt-2 bg-orange-300 text-orange-800 text-sm px-3 py-3 rounded-full shadow-md font-semibold whitespace-nowrap">
-                                Theo dõi tình hình sức khỏe của trẻ
+                                Income đáp ứng được 8 bộ sổ bán trú
                             </div>
                         </div>
                     </div>

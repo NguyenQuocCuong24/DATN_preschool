@@ -3,14 +3,16 @@ import React from 'react';
 
 export default function Feature() {
     const features = [
-        "Dễ dàng theo dõi thông tin học tập, đưa đón học sinh, chế độ ăn uống",
-        "Hỗ trợ gửi thông tin bằng phân hệ tin nhắn đến số điện thoại phụ huynh học sinh.",
-        "Hỗ trợ xuất danh sách excel theo nhiều tiêu chí lọc → Phục vụ trong công tác phổ cập mầm non.",
+        "Giúp tính sổ thu thanh toán nhỏ tự động → hỗ trợ in phiếu báo thu tiền học phí hàng tháng gửi phụ huynh học sinh.",
+        "Theo dõi thanh toán phiếu thu → giúp xác định học sinh đã đóng tiền và chưa đóng tiền học hằng tháng.",
+        "In sổ thu thanh toán lớn cho từng lớp.",
+        "In sổ thu thanh toán lớn cho toàn trường.",
+        "Quản lý danh sách đã đóng tiền, chưa đóng tiền linh động theo từng khoản thu.",
     ];
 
     return (
         <div className='mb-20'>
-            <div className="bg-white py-4 px-6 max-w-6xl mx-auto">
+            <div className="bg-white py-4 px-6 max-w-6xl mx-auto pt-10">
                 {/* Tiêu đề */}
                 <div className="flex items-center bg-blue-100 px-4 py-2 rounded-t-md w-fit mb-4">
                     <Image
@@ -29,7 +31,7 @@ export default function Feature() {
                 <div className="flex bg-white border rounded-md shadow-md">
                     <div className="w-1/3 p-6 flex justify-center items-center">
                         <Image
-                            src="/assets/images/growthchart.png"
+                            src="/assets/icons/income.png"
                             alt="Biểu đồ tăng trưởng"
                             width={250}
                             height={250}
