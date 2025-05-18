@@ -1,17 +1,34 @@
+"use client"
+
+import { Button } from "antd";
+import { CalendarCheck2, ClipboardList, CookingPot, House, LogOut, Table2, Users, Users2 } from "lucide-react";
 import Image from "next/image";
+import { ToastContainer } from "react-toastify";
 import LeftMenuItem from "./item";
-import { CalendarCheck2, ClipboardList, House, Table2, Users, Users2 } from "lucide-react";
+
 
 const LeftMenu = () => {
+    const handleLogout = async () => {
+      localStorage.clear();
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/login';
+    }
+
     return (
-        <div className="w-1/5 min-h-screen bg-white flex flex-col">
-            <div className="mt-8 text-center p-4 text-large-bold mx-auto">Quản lý <br /> mầm non</div>
-            <div className="p-8">
+        <div className="w-1/5 h-screen flex-shrink-0 min-h-screen bg-white flex flex-col">
+            <ToastContainer />
+
+            <div className="mt-4 text-center p-4 text-large-bold mx-auto">Quản lý <br /> mầm non</div>
+            <div className="p-4">
               <LeftMenuItem name={"Tổng quan"} icon={<House />} route="/"/>
               <LeftMenuItem name={"Học sinh"} icon={<Users />} route="/student"/>
               <LeftMenuItem name={"Giáo viên"} icon={<Users2 />} route="/teacher"/>
               <LeftMenuItem name={"Lớp học"} icon={<Table2 />} route="/class"/>
-              <LeftMenuItem name={"Điểm danh"} icon={<ClipboardList />} route="/"/>
+              <LeftMenuItem name={"Điểm danh"} icon={<ClipboardList />} route="/attendance"/>
+              <LeftMenuItem name={"Lịch trình"} icon={<CalendarCheck2 />} route="/schedule"/>
+              <LeftMenuItem name={"Quản lý đi xe"} icon={<CalendarCheck2 />} route="/shuttle-schedule"/>
+              <LeftMenuItem name={"Quản lý thực đơn"} icon={<CookingPot />} route="/menu"/>
+
               {/* <LeftMenuItem name={"Lịch"} icon={<CalendarCheck2 />} route="/"/> */}
             </div>
             
@@ -29,6 +46,10 @@ const LeftMenu = () => {
                   <div>Quản trị viên</div>
                 </div>
               </div>
+
+              <Button onClick={handleLogout} className="cursor-pointer w-full py-8" color="default" variant="filled" icon={<LogOut />} size={"large"}>
+                Đăng xuất
+              </Button>
             </div>
       </div>
     );

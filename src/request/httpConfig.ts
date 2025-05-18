@@ -1,6 +1,5 @@
 import { handleErrorCode, handleSuccess } from "@/src/utils/client/common";
 import { normalizePath } from "@/src/utils/client/global";
-// import { LoginResType } from "@/validations/auth.schema";
 import { redirect } from "next/navigation";
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
@@ -50,10 +49,11 @@ const request = async <Response>(
   } else if (options?.body) {
     body = JSON.stringify(options.body);
   }
+  
   const baseHeaders: {
     [key: string]: string;
   } =
-    body instanceof FormData || method == "DELETE"
+    body instanceof FormData || typeof body === 'undefined'
       ? {}
       : {
           "Content-Type": "application/json",
@@ -144,9 +144,10 @@ const http = {
   },
   delete<Response>(
     url: string,
+    body?: any,
     options?: Omit<CustomOptions, "body"> | undefined
   ) {
-    return request<Response>("DELETE", url, { ...options });
+    return request<Response>("DELETE", url, { ...options, body });
   },
 };
 

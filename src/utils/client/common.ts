@@ -6,7 +6,7 @@ type ErrorCodeMap = {
 
 
 export const handleErrorCode = (error: any) => {
-  const errorMessage = error?.code || error?.message || "Có lỗi xảy ra";
+  const errorMessage = error?.code || error?.message || error?.error || "Có lỗi xảy ra";
   toast.error(errorMessage)
 };
 const TOAST_ID = "global-toast";

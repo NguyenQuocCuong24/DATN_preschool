@@ -4,8 +4,13 @@ export const convertToDateTime = (text: string) => {
 }
 
 export const convertToDate = (text: string) => {
-    if(text == null) return "";
+    if(text == null) return new Date();
     return new Date(text).toLocaleDateString("vi-VN");
+}
+
+export const convertToMonth = (text: string) => {
+    if(text == null) return "";
+    return dayjs(text).format('MM/YYYY');
 }
 
 export const convertToTime = (text: string) => {
@@ -23,7 +28,7 @@ export const convertToDayjs = (text?: string) => {
 
 export function getStartOfWeek(date = new Date()) {
     const day = date.getDay(); 
-    const diff = (day === 0 ? -6 : 1) - day; 
+    const diff = (day === 0 ? -6 : 1) - day + 1; 
     const start = new Date(date);
     start.setDate(date.getDate() + diff);
     start.setHours(0, 0, 0, 0); 
