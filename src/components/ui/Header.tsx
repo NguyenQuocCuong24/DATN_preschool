@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -11,12 +12,14 @@ import {
     IconButton,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import { motion } from 'framer-motion'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 
 export default function Header() {
     const router = useRouter()
+    const pathname = usePathname()
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null)
@@ -45,9 +48,9 @@ export default function Header() {
     }
 
     const mainLinks = [
-        { label: 'TRANG CHỦ', href: '/home', type: 'primary' },
-        { label: 'TÍNH NĂNG', href: '#', type: 'feature' }, 
-        { label: 'SỔ SÁCH BÁN TRÚ', href: '#' },
+        { label: 'TRANG CHỦ', href: '/home', type: '' },
+        { label: 'TÍNH NĂNG', href: '#', type: 'feature' },
+        { label: 'SỔ SÁCH BÁN TRÚ', href: '/report' },
         { label: 'ĐĂNG KÝ', href: '#' },
         { label: 'LIÊN HỆ', href: '#' },
     ]
@@ -64,14 +67,15 @@ export default function Header() {
             <div className="container mx-auto flex flex-col mb-4">
                 <div className="container flex items-center justify-between mt-4">
                     {/* Logo */}
-                    <div className="flex items-center">
+                    <Link href="/home">
                         <Image
                             src="/assets/images/logo-school.png"
                             alt="Logo"
                             width={300}
                             height={80}
+                            className="cursor-pointer"
                         />
-                    </div>
+                    </Link>
 
                     {/* Mobile Hamburger Menu */}
                     <div className="md:hidden">
@@ -127,17 +131,29 @@ export default function Header() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex items-center gap-8 text-sm text-gray-700 font-medium">
-                        {mainLinks.map((link, index) => {
+                    <nav className="hidden md:flex items-center gap-8 text-sm text-gray-700 font-medium relative">
+                        {mainLinks.map((link) => {
+                            const isActive = pathname === link.href;
+
                             if (link.type === 'primary') {
                                 return (
-                                    <Link
-                                        key={link.label}
-                                        href={link.href}
-                                        className="border border-blue-300 px-3 py-1 rounded text-blue-500 font-normal hover:bg-blue-50"
-                                    >
-                                        {link.label}
-                                    </Link>
+                                    <div key={link.label} className="relative px-2 py-1">
+                                        <Link
+                                            href={link.href}
+                                            className={`border border-blue-300 px-3 py-1 rounded font-normal transition-colors ${isActive ? 'text-blue-600' : 'text-blue-500 hover:bg-blue-50'
+                                                }`}
+                                        >
+                                            {link.label}
+                                        </Link>
+
+                                        {/* Hiệu ứng underline khi được chọn */}
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="underline"
+                                                className="absolute left-0 right-0 bottom-0 h-[2px] bg-blue-600 rounded"
+                                            />
+                                        )}
+                                    </div>
                                 )
                             }
 
@@ -159,7 +175,10 @@ export default function Header() {
                                             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                                         >
                                             {featureLinks.map((feature) => (
-                                                <MenuItem key={feature.label} onClick={() => handleNavigate(feature.href)}>
+                                                <MenuItem
+                                                    key={feature.label}
+                                                    onClick={() => handleNavigate(feature.href)}
+                                                >
                                                     {feature.label}
                                                 </MenuItem>
                                             ))}
@@ -168,26 +187,26 @@ export default function Header() {
                                 )
                             }
 
+                            // Các mục còn lại
                             return (
-                                <Link
-                                    key={link.label}
-                                    href={link.href}
-                                    className="text-gray-800 hover:text-blue-600 transition"
-                                >
-                                    {link.label}
-                                </Link>
+                                <div key={link.label} className="relative px-2 py-1">
+                                    <Link
+                                        href={link.href}
+                                        className={`transition-colors ${isActive ? 'text-blue-600 font-semibold' : 'hover:text-blue-500 text-gray-800'
+                                            }`}
+                                    >
+                                        {link.label}
+                                    </Link>
+
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="underline"
+                                            className="absolute left-0 right-0 bottom-0 h-[2px] bg-blue-600 rounded"
+                                        />
+                                    )}
+                                </div>
                             )
                         })}
-
-                        {/* Support & Login buttons */}
-                        <div className="flex justify-end items-center space-x-2">
-                            <button className="border border-blue-500 text-blue-500 px-4 py-1 rounded hover:bg-blue-100 transition text-sm font-semibold">
-                                HỖ TRỢ 
-                            </button>
-                            <button className="border border-blue-500 text-blue-500 px-4 py-1 rounded hover:bg-blue-100 transition text-sm font-semibold">
-                                ĐĂNG NHẬP
-                            </button>
-                        </div>
                     </nav>
 
                 </div>

@@ -8,7 +8,7 @@ const images = [
   "/assets/images/banner2.png",
   "/assets/images/img_respon01.png",
   "/assets/images/img_respon02.png",
-  "/assets/images/cover_scaled.png",
+  // "/assets/images/cover_scaled.png",
 ];
 
 const imageDescriptions = [
@@ -82,9 +82,8 @@ export default function Slider() {
         <div className="relative z-10 h-full w-full overflow-hidden">
           <div
             ref={sliderRef}
-            className={`flex h-full will-change-transform ${
-              isAnimating ? "transition-transform duration-[1400ms] ease-in-out" : ""
-            }`}
+            className={`flex h-full will-change-transform ${isAnimating ? "transition-transform duration-[1400ms] ease-in-out" : ""
+              }`}
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
             {extendedImages.map((img, index) => (
@@ -137,9 +136,8 @@ export default function Slider() {
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex % images.length ? "bg-white" : "bg-white/40"
-                }`}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex % images.length ? "bg-white" : "bg-white/40"
+                  }`}
               />
             ))}
           </div>

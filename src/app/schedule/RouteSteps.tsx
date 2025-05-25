@@ -7,10 +7,10 @@ interface SimpleRouteProps {
 
 const RouteSteps: React.FC<SimpleRouteProps> = ({ locations }) => {
   return (
-    <div className="flex flex-wrap items-center justify-around p-4">
+    <div className="flex flex-wrap items-center justify-between p-4">
       {locations.map((location, index) => (
         <React.Fragment key={index}>
-          <span className="px-4 py-2 bg-blue-100 text-blue-800 font-semibold rounded-full whitespace-nowrap">
+          <span className="px-4 py-2 my-2 bg-blue-100 text-blue-800 font-semibold rounded-full whitespace-nowrap">
             {location}
           </span>
           {index < locations.length - 1 && (

@@ -1,6 +1,11 @@
-import React from 'react';
-import { DatePicker, Form, FormInstance, Input, Modal, Select } from "antd";
-import { ClassType } from '@/src/request/model';
+"use client"
+import { Schedule } from '@/src/request/model';
+import { ConfigProvider, DatePicker, Form, FormInstance, Modal, Select } from "antd";
+import viVN from 'antd/es/locale/vi_VN';
+import dayjs from 'dayjs';
+import 'dayjs/locale/vi';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from "react";
 
 type ModalProps = {
     title: String;
@@ -9,11 +14,19 @@ type ModalProps = {
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;
     form: FormInstance;
-    classes: ClassType[];
+    schedules: Schedule[];
+    scheduleId: number;
 }
 
 const ModalForm = (props: ModalProps) => {
-    const {title, confirmText, handleOk, isModalOpen, setIsModalOpen, form, classes } = props;
+    const searchParams = useSearchParams()
+    const id = searchParams.get('scheduleId') || 0;
+    const {title, confirmText, handleOk, isModalOpen, setIsModalOpen, form, schedules, scheduleId } = props;
+    const [selected, setSelected] = useState<Schedule>();
+    const [selectedDate, setSelectedDate] = useState(dayjs());
+    useEffect(() => {
+        setSelected(schedules.find(e => e.id == scheduleId));
+    }, [schedules])
     
     return (
         <div>
@@ -26,38 +39,80 @@ const ModalForm = (props: ModalProps) => {
                 cancelText="Hủy"
             >
                 <Form form={form} layout="vertical">
-                  <Form.Item name="fullName" label="Tên học sinh" rules={[{ required: true, message: "Vui lòng nhập họ tên" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="mobile" label="Số điện thoại" rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="email" label="Địa chỉ email" rules={[{ required: false }]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="address" label="Địa chỉ" rules={[{ required: false}]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="description" label="Mô tả" rules={[{ required: false}]}>
-                      <Input />
-                  </Form.Item>
-                  <Form.Item name="birthDate" label="Ngày sinh" rules={[{ required: true, message: "Vui lòng chọn ngày sinh" }]}>
-                      <DatePicker className='w-full'/>
-                  </Form.Item>
-
-                  <Form.Item name="classId" label="Chọn lớp học" rules={[{ required: true, message: "Vui lòng chọn lớp học" }]}>
+                  <Form.Item name="scheduleId" label="Lịch trình" initialValue={selected?.id} rules={[{ required: true, message: "Vui lòng chọn lịch trình" }]}>
                     <Select
                         showSearch
-                        placeholder="Chọn lớp học"
+                        placeholder="Chọn lịch trình"
                         optionFilterProp="label"
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={classes.map(item => ({
+                        onChange={(val) => {
+                            const selectedItem = schedules.find(item => item.id === val);
+                            if (selectedItem) {
+                                setSelected(selectedItem); 
+                            }
+                          }}
+                        options={schedules.map(item => ({
                             value: item.id,
                             label: item.name
                         }))}
                         />
+                  </Form.Item>
+
+                    {<Form.Item name="className" label="Chọn lớp học" >
+                        <Select
+                            disabled
+                            showSearch
+                            placeholder="Chọn lớp học"
+                            optionFilterProp="label"
+                            />
+                    </Form.Item>}
+                    
+                    {<Form.Item name="customerName" label="Chọn học sinh" >
+                        <Select
+                            disabled
+                            showSearch
+                            placeholder={form.getFieldsValue().customerName}
+                            optionFilterProp="label"
+                            />
+                    </Form.Item>}
+                  <Form.Item name="pickUpAddress" label="Địa điểm đón" rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}>
+                  <Select
+                        showSearch
+                        placeholder="Điểm đón"
+                        optionFilterProp="label"
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={selected?.routes.map(item => ({
+                            value: item,
+                            label: item
+                        }))}
+                        />
+                  </Form.Item>
+                  <Form.Item name="dropOffAddress" label="Địa điểm trả" rules={[{ required: true, message: "Vui lòng nhập email" }]}>
+                  <Select
+                        showSearch
+                        placeholder="Điểm trả"
+                        optionFilterProp="label"
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={selected?.routes.map(item => ({
+                            value: item,
+                            label: item
+                        }))}
+                        />
+                  </Form.Item>
+                  
+                  <Form.Item name="startTime" label="Tháng đăng ký" initialValue={dayjs()} rules={[{ required: true, message: "Vui lòng chọn tháng đăng ký" }]}>
+                    <ConfigProvider locale={viVN}>
+                        <DatePicker picker="month"
+                        value={selectedDate} 
+                        onChange={(date) => setSelectedDate(date)}
+                          format="MM/YYYY" className="w-full" />
+                    </ConfigProvider>
                   </Form.Item>
                 </Form>
             </Modal>

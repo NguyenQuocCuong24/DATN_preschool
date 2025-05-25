@@ -16,7 +16,7 @@ export default function Feature() {
                 {/* Tiêu đề */}
                 <div className="flex items-center bg-blue-100 px-4 py-2 rounded-t-md w-fit mb-4">
                     <Image
-                        src="/assets/images/ico_tab01.png" // Giả sử bạn có icon giống ảnh mẫu
+                        src="/assets/images/ico_tab01.png"
                         alt="icon"
                         width={50}
                         height={50}

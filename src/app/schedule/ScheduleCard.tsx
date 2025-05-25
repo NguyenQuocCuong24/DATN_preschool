@@ -1,5 +1,5 @@
 import http from '@/src/request/httpConfig';
-import { Customer, Schedules } from '@/src/request/model';
+import { Customer, Schedule } from '@/src/request/model';
 import { Form, Popconfirm } from "antd";
 import Link from 'next/link';
 import { useState } from 'react';
@@ -8,7 +8,7 @@ import RouteSteps from './RouteSteps';
 
 
 type TeacherCardProps = {
-  schedule: Schedules;
+  schedule: Schedule;
   isReload: boolean;
   index: number;
   setIsReload: (isReload: boolean) => void; 
@@ -46,7 +46,7 @@ const ScheduleCard = (props: TeacherCardProps) => {
 
     return (
         <div className="mb-4 w-[95%] bg-white border border-gray-300 rounded-xl shadow-sm px-4 pt-4 space-y-3">
-            <p className='text-normal-bold'>Lộ trình {index + 1}</p>
+            <p className='text-normal-bold'>{schedule.name}</p>
             <RouteSteps locations={schedule.routes}/>
 
             <div className="flex justify-end gap-2 py-4 border-t border-gray-300 mt-2">

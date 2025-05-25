@@ -1,14 +1,14 @@
 "use client"
 import CreateButton from "@/src/components/button/createButton";
 import http from "@/src/request/httpConfig";
-import { Form, Input, Modal, Select } from "antd";
+import { Form } from "antd";
 import { useEffect, useState } from "react";
 import LeftMenu from "../../components/sidebar/leftMenu";
 import { ClassType, Customer } from "../../request/model";
 import { ClassResponse, CustomerResponse } from "../../request/reponseType";
-import CustomTable from "./StudentTable";
 import FilterBox from "./filterBox";
 import ModalForm from "./ModalForm";
+import CustomTable from "./StudentTable";
 
 export default function Teacher() {
     const [student, setStudent] = useState<Customer[]>([]);

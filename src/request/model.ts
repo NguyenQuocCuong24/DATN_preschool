@@ -48,7 +48,7 @@ export type ClassTeacher = {
   customerName: string;
 };
 
-export type Schedules = {
+export type Schedule = {
   id: number;
   name: string;
   routes: string[];
@@ -69,4 +69,5 @@ export type Menu = {
   foods: string[];
   startTime: string;
   type: string;
+  image: string;
 };

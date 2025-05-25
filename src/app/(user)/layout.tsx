@@ -1,9 +1,7 @@
 'use client'
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import Slider from "./home/components/Home";
-import Header from "@/src/components/ui/Header";
 import Footer from "@/src/components/ui/Footer";
+import Header from "@/src/components/ui/Header";
+import { useState } from "react";
 
 const navItems = [
     { name: "Home", path: "/" },

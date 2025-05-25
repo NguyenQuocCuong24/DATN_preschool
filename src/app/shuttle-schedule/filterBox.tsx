@@ -1,9 +1,9 @@
-import { Schedules } from '@/src/request/model';
+import { Schedule } from '@/src/request/model';
 import { Select } from 'antd';
 import React from 'react';
 
 type FilterBoxProps = {
-    schedules: Schedules[];
+    schedules: Schedule[];
     scheduleId: number
     setScheduleId: (scheduleId: number) => void;
 }
@@ -21,10 +21,10 @@ const FilterBox = (props : FilterBoxProps) => {
                 filterOption={(input, option) =>
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                 }
-                value={scheduleId}
+                value={classes.filter(e => e.id == scheduleId)[0]?.id}
                 options={classes.map(item => ({
-                value: item.id,
-                label: item.name
+                    value: item.id,
+                    label: item.name
                 }))}
             />
         </div>

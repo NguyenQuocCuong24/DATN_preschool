@@ -5,15 +5,15 @@ import LeftMenu from '@/src/components/sidebar/leftMenu';
 import http from "@/src/request/httpConfig";
 import { Form } from 'antd';
 import { useEffect, useState } from "react";
-import { Schedules } from "../../request/model";
+import { Schedule } from "../../request/model";
 import { ScheduleResponse } from "../../request/reponseType";
 import ModalForm from './ModalForm';
 import ScheduleCard from './ScheduleCard';
 
 const prefix = "/schedules"
 
-const Schedule = () => {
-    const [schedules, setSchedules] = useState<Schedules[]>();
+const SchedulePage = () => {
+    const [schedules, setSchedules] = useState<Schedule[]>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReload, setIsReload] = useState<boolean>(false)
     const [form] = Form.useForm();
@@ -33,7 +33,7 @@ const Schedule = () => {
     const handleOk = () => {
         form.validateFields()
           .then(values => {
-            http.post<Schedules>(`${prefix}`, {...values}).then(() => setIsReload(!isReload));
+            http.post<Schedule>(`${prefix}`, {...values}).then(() => setIsReload(!isReload));
             setIsModalOpen(false);
             form.resetFields();
           })
@@ -52,7 +52,7 @@ const Schedule = () => {
               <CreateButton onClick={() => setIsModalOpen(true)}/>
             </div>   
             <div className="mt-8 w-full bg-white px-4 py-6">
-              <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
+              <div className="max-w-6xl mx-auto grid ">
                 {schedules && schedules.map((data, index) => {
                     return (
                         <div key={index}>
@@ -70,4 +70,4 @@ const Schedule = () => {
     );
 };
 
-export default Schedule;
+export default SchedulePage;

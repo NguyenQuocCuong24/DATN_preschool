@@ -1,4 +1,4 @@
-import { Attendance, ClassType, Customer, Lesson, Menu, Schedules, ShuttleSchedule } from "./model";
+import { Attendance, ClassType, Customer, Lesson, Menu, Schedule, ShuttleSchedule } from "./model";
 
 export type CustomerResponse = {
     data: Array<Customer>;
@@ -23,7 +23,7 @@ export type AttendanceResponse = {
 };
 
 export type ScheduleResponse = {
-  data: Array<Schedules>;
+  data: Array<Schedule>;
   pagination: Object
 };
 
