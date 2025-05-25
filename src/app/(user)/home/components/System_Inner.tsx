@@ -45,7 +45,7 @@ export default function FeaturesSection() {
     ];
 
     return (
-        <div className="bg-sky-200 py-12 w-screen overflow-x-hidden ">
+        <div className="bg-sky-200 py-12 w-full overflow-x-hidden ">
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 text-center">
                 {features.map((item, index) => (

@@ -71,7 +71,7 @@ export default function Slider() {
 
   return (
     <div>
-      <div className="relative w-screen h-[500px] overflow-hidden group">
+      <div className="relative w-full h-[500px] overflow-hidden group">
         <Image
           src="/assets/images/bg_slide02.png"
           alt="Background"
@@ -88,7 +88,7 @@ export default function Slider() {
           >
             {extendedImages.map((img, index) => (
               <div key={index} className="w-full flex flex-shrink-0 h-full">
-                <div className="w-[55%] flex flex-col justify-center items-center px-10">
+                <div className="w-[50%] flex flex-col justify-center items-center px-10">
                   {Array.isArray(imageDescriptions[index % images.length]) &&
                     imageDescriptions[index % images.length].map((text, idx) => (
                       <div
@@ -103,7 +103,7 @@ export default function Slider() {
                     ))}
                 </div>
 
-                <div className="w-[45%] relative">
+                <div className="w-[40%] relative">
                   <Image
                     src={img}
                     alt={`Slide ${index + 1}`}
@@ -144,7 +144,7 @@ export default function Slider() {
         </div>
       </div>
 
-      <div className="w-screen flex items-center justify-center bg-white py-10">
+      <div className=" flex items-center justify-center bg-white py-10">
         <h1 className="text-5xl font-stix-two text-center">
           Phân hệ trong Quản lý trường bán trú trực tuyến
         </h1>

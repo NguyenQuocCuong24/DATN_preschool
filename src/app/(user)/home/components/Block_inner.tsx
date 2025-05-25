@@ -22,7 +22,7 @@ const data = [
 
 export default function Blockinner() {
   return (
-    <div className="w-screen bg-white py-10">
+    <div className="w-full bg-white py-20">
       <div className="max-w-screen-xl mx-auto px-4">
         <h2 className="text-center text-xl font-semibold text-gray-800 mb-10">
           Chúng tôi đã triển khai sản phẩm ở rất nhiều quận huyện và hiện tại đang được sử dụng rất tốt

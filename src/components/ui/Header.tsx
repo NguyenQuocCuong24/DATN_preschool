@@ -51,8 +51,8 @@ export default function Header() {
         { label: 'TRANG CHỦ', href: '/home', type: '' },
         { label: 'TÍNH NĂNG', href: '#', type: 'feature' },
         { label: 'SỔ SÁCH BÁN TRÚ', href: '/report' },
-        { label: 'ĐĂNG KÝ', href: '#' },
-        { label: 'LIÊN HỆ', href: '#' },
+        { label: 'ĐĂNG KÝ', href: '/register' },
+        { label: 'LIÊN HỆ', href: '/contact' },
     ]
     const featureLinks = [
         { label: 'Quản lý học sinh', href: '/student_management' },
@@ -116,10 +116,10 @@ export default function Header() {
                                 </MenuItem>
                             ))}
 
-                            {/* Support & Login */}
+                            {/* Support & Login in mobile menu */}
                             <MenuItem>
                                 <button className="w-full text-left border border-blue-500 text-blue-500 px-2 py-1 rounded hover:bg-blue-100 text-sm font-semibold">
-                                    HỖ TRỢ TỪ XA
+                                    HỖ TRỢ
                                 </button>
                             </MenuItem>
                             <MenuItem>
@@ -133,7 +133,7 @@ export default function Header() {
                     {/* Desktop Navigation */}
                     <nav className="hidden md:flex items-center gap-8 text-sm text-gray-700 font-medium relative">
                         {mainLinks.map((link) => {
-                            const isActive = pathname === link.href;
+                            const isActive = pathname === link.href
 
                             if (link.type === 'primary') {
                                 return (
@@ -145,8 +145,6 @@ export default function Header() {
                                         >
                                             {link.label}
                                         </Link>
-
-                                        {/* Hiệu ứng underline khi được chọn */}
                                         {isActive && (
                                             <motion.div
                                                 layoutId="underline"
@@ -187,7 +185,6 @@ export default function Header() {
                                 )
                             }
 
-                            // Các mục còn lại
                             return (
                                 <div key={link.label} className="relative px-2 py-1">
                                     <Link
@@ -197,7 +194,6 @@ export default function Header() {
                                     >
                                         {link.label}
                                     </Link>
-
                                     {isActive && (
                                         <motion.div
                                             layoutId="underline"
@@ -209,6 +205,15 @@ export default function Header() {
                         })}
                     </nav>
 
+                    {/* Desktop Support & Login Buttons */}
+                    <div className="hidden md:flex items-center gap-4">
+                        <button className="border border-blue-500 text-blue-500 px-3 py-1 rounded hover:bg-blue-50 text-sm font-semibold">
+                            HỖ TRỢ
+                        </button>
+                        <button className="border border-blue-500 text-blue-500 px-3 py-1 rounded hover:bg-blue-50 text-sm font-semibold">
+                            ĐĂNG NHẬP
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>

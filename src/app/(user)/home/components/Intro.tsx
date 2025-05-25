@@ -13,7 +13,7 @@ export default function Intro() {
 
     return (
         <div
-            className="w-screen min-h-screen bg-cover bg-center flex items-center px-6 py-12 relative"
+            className="w-full min-h-screen bg-cover bg-center flex items-center px-6 py-12 relative"
             style={{ backgroundImage: 'url("/assets/images/bg_intro.png")' }}
         >
             {/* Overlay tối nhưng không cản tương tác */}

@@ -6,7 +6,7 @@ import Block from './components/Block_inner'
 
 export default function page() {
   return (
-    <div className='container'>
+    <div className=''>
       <Slider />
       <System />
       <Intro />
