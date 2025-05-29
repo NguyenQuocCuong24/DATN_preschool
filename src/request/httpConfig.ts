@@ -36,7 +36,7 @@ export class HttpError extends Error {
   }
 }
 
-let clientLogoutRequest: null | Promise<any> = null;
+let clientLogoutRequest: null | Promise<unknown> = null;
 const isClient = typeof window !== "undefined";
 const request = async <Response>(
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",

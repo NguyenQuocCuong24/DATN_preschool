@@ -11,7 +11,7 @@ type WeekPickerProps = {
 };
 
 const WeekPicker = ({ setSelectDate }: WeekPickerProps) => {
-    const onWeekChange = (date: Dayjs, dateString: string | string[]) => {
+    const onWeekChange = (date: Dayjs) => {
         setSelectDate(date?.toDate())
         console.log('Chọn tuần:', date);
     };

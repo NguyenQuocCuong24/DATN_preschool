@@ -1,4 +1,13 @@
+import { jwtDecode } from 'jwt-decode';
 import { NextRequest, NextResponse } from 'next/server';
+import { CUSTOMER_TYPE } from './utils/config';
+
+const urls = [
+  ''
+  // '/student',
+  // '/teacher',
+  // '/attendance'
+]
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
@@ -7,7 +16,24 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  return NextResponse.next();
+  try {
+    const decoded = jwtDecode(token);
+    
+    const pathname = request.nextUrl.pathname;
+
+    if (decoded.customerType !== CUSTOMER_TYPE.ADMIN) {
+      if(urls.includes(pathname)){
+        return NextResponse.redirect(new URL('/forbiden', request.url));
+      }
+    }
+
+    return NextResponse.next();
+  } catch (err) {
+    console.log(err);
+    
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
 }
 
 export const config = {
@@ -19,23 +45,7 @@ export const config = {
       - /api (API route)
       - file tĩnh: favicon, _next, static, images, v.v.
     */
-    '/((?!api|_next/static|_next/image|favicon.ico|login|register).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|login|register|forbiden|).*)',
   ],
 };
-
-
-export async function login(request: Request) {
-  const response = NextResponse.redirect(new URL('/', request.url));
-
-  response.cookies.set({
-    name: 'token',
-    value: 'your_jwt_token',
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    path: '/',
-  });
-
-  return response;
-}
 

@@ -1,12 +1,13 @@
 "use client"
 import http from '@/src/request/httpConfig';
 import { convertToDate, convertToDayjs } from '@/src/utils/datetime';
-import { Button, Form, Popconfirm, Table, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Form, Popconfirm, Table, Typography } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { ClassType, Customer } from '../../request/model';
 import ModalForm from './ModalForm';
-import { Info } from 'lucide-react';
-import Link from 'next/link';
+import { isAdmin } from '@/src/utils/userInfo';
 
 type TableProps = {
   originData: Customer[];
@@ -15,15 +16,16 @@ type TableProps = {
   setIsReload: (isReload: boolean) => void; 
   classes: ClassType[];
   classId: number;
+  search: string;
 };
 
 const CustomTable = (props: TableProps) => {
-  const {originData, isReload, loading, setIsReload, classes, classId} = props;
+  const {originData, isReload, loading, setIsReload, classes, classId, search} = props;
   const [form] = Form.useForm();
   const [data, setData] = useState<Customer[]>(originData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const currentClass = classes.filter(e => e.id === classId)[0];
-
+  
   useEffect(() => {
     setData(originData);
   }, [originData])
@@ -52,7 +54,7 @@ const CustomTable = (props: TableProps) => {
   };
 
 
-  const columns = [
+  const columns: ColumnsType<Customer> = [
     {
         title: 'STT',
         dataIndex: 'stt',
@@ -65,7 +67,6 @@ const CustomTable = (props: TableProps) => {
       dataIndex: 'fullName',
       key: 'fullName',
       width: '20%',
-      editable: true,
     },
     {
       title: 'Số điện thoại',
@@ -79,7 +80,7 @@ const CustomTable = (props: TableProps) => {
       width: '10%',
       key: 'birthDate',
       render: (date: string) => {
-        return convertToDate(date);
+        return <div>{convertToDate(date)}</div>;
       }
     },
     {
@@ -103,6 +104,25 @@ const CustomTable = (props: TableProps) => {
       dataIndex: 'detail',
       render: (_: any, record: Customer) => {
         
+        if (isAdmin()) {
+          return(
+          <div className='flex justify-between'>
+            <Link href={`/student/${record.id}`}>
+              <Typography.Link>
+                Chi tiết
+              </Typography.Link>
+            </Link>
+                <div>|</div>
+              <Typography.Link onClick={() => handleUpdate(record)}>
+                Sửa
+              </Typography.Link>
+              <div>|</div>
+              <Popconfirm title="Bạn có muốn xoá?" onConfirm={() => onDelete(record)} okText="Có" cancelText="Không">
+                <a>Xoá</a>
+              </Popconfirm>
+          </div>
+          )
+        } 
         return (
           <div className='flex justify-between'>
             <Link href={`/student/${record.id}`}>
@@ -110,16 +130,7 @@ const CustomTable = (props: TableProps) => {
                 Chi tiết
               </Typography.Link>
             </Link>
-            <div>|</div>
-            <Typography.Link onClick={() => handleUpdate(record)}>
-              Sửa
-            </Typography.Link>
-            <div>|</div>
-            <Popconfirm title="Bạn có muốn xoá?" onConfirm={() => onDelete(record)} okText="Có" cancelText="Không">
-              <a>Xoá</a>
-            </Popconfirm>
           </div>
-            
         )
       },
     },
@@ -131,7 +142,9 @@ const CustomTable = (props: TableProps) => {
       <Form form={form} component={false}>
         <Table
           bordered
-          dataSource={data}
+          dataSource={data.filter((item) =>
+            item.fullName.toLowerCase().includes(search.toLowerCase())
+          )}
           loading={loading}
           columns={columns}
           rowClassName="editable-row"

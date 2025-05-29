@@ -2,28 +2,26 @@
 import { Schedule } from '@/src/request/model';
 import { ConfigProvider, DatePicker, Form, FormInstance, Modal, Select } from "antd";
 import viVN from 'antd/es/locale/vi_VN';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/vi';
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 
 type ModalProps = {
-    title: String;
-    confirmText: String;
+    title: string;
+    confirmText: string;
     handleOk: () => void; 
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;
     form: FormInstance;
     schedules: Schedule[];
     scheduleId: number;
+    selectedDate: Dayjs;
+    setSelectedDate: (date: Dayjs) => void;
 }
 
 const ModalForm = (props: ModalProps) => {
-    const searchParams = useSearchParams()
-    const id = searchParams.get('scheduleId') || 0;
-    const {title, confirmText, handleOk, isModalOpen, setIsModalOpen, form, schedules, scheduleId } = props;
+    const {title, confirmText, handleOk, isModalOpen, setIsModalOpen, form, schedules, scheduleId, selectedDate, setSelectedDate } = props;
     const [selected, setSelected] = useState<Schedule>();
-    const [selectedDate, setSelectedDate] = useState(dayjs());
     useEffect(() => {
         setSelected(schedules.find(e => e.id == scheduleId));
     }, [schedules])
@@ -110,7 +108,11 @@ const ModalForm = (props: ModalProps) => {
                     <ConfigProvider locale={viVN}>
                         <DatePicker picker="month"
                         value={selectedDate} 
-                        onChange={(date) => setSelectedDate(date)}
+                        onChange={(date) => {
+                            console.log("55555: ", date);
+                            
+                            setSelectedDate(date)
+                        }}
                           format="MM/YYYY" className="w-full" />
                     </ConfigProvider>
                   </Form.Item>

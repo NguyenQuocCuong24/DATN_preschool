@@ -10,6 +10,7 @@ import { CircleX } from "lucide-react";
 import { useEffect, useState } from "react";
 import WeekPicker from "./WeekPicker";
 import Link from "next/link";
+import { isAdmin } from "@/src/utils/userInfo";
 
 export type MealType = "LUNCH" | "DINNER";
 
@@ -108,9 +109,9 @@ export default function MealPlanManager() {
   }, [reload])
 
   const getAllMenus = async () => {
-    let toDate = new Date(selectDate);
+    const toDate = new Date(selectDate);
     toDate.setDate(selectDate.getDate() + 6);
-    var response = await http.get<MenuResponse>(`/menus?fromDate=${selectDate.toISOString().split('T')[0]}&toDate=${toDate.toISOString().split('T')[0]}`);
+    const response = await http.get<MenuResponse>(`/menus?fromDate=${selectDate.toISOString().split('T')[0]}&toDate=${toDate.toISOString().split('T')[0]}`);
     if(response.status === 200){
       const data = response.payload.data;
       setMeals(() => {
@@ -157,7 +158,6 @@ export default function MealPlanManager() {
   };
 
   const onSubmit = async () => {
-    meals.map
     const promises = meals.map((meal: MealPlan) => {
       for (const [mealType, dishes] of Object.entries(meal.meals)) {
         if (dishes.length > 0) {
@@ -209,7 +209,7 @@ export default function MealPlanManager() {
                 <WeekPicker setSelectDate={setSelectDate}/>
               </div>
             </div>
-            {idUpdate && <div className="px-4 py-2 bg-button-primary h-10 w-fit rounded text-white font-medium cursor-pointer" onClick={onSubmit}>
+            {idUpdate && isAdmin() && <div className="px-4 py-2 bg-button-primary h-10 w-fit rounded text-white font-medium cursor-pointer" onClick={onSubmit}>
                 Cập nhật
             </div>}
           </div>
@@ -220,9 +220,9 @@ export default function MealPlanManager() {
                   <div key={type} className="mb-4">
                     <div className="flex justify-between items-center">
                       <span className="font-semibold">{MEAL_TYPE[type]}</span>
-                      <Button size="small" onClick={() => openModal(day, type, index)}>
+                      {isAdmin() && <Button size="small" onClick={() => openModal(day, type, index)}>
                         {meals[type].length == 0 ? "+ Thêm món" : "Chỉnh sửa"}
-                      </Button>
+                      </Button>}
 
                       
                     </div>

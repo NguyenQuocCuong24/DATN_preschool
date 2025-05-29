@@ -8,11 +8,13 @@ import { Customer } from "../../request/model";
 import { CustomerResponse } from "../../request/reponseType";
 import ModalForm from "./ModalForm";
 import TeacherCard from "./TeacherCard";
+import Loading from "@/src/components/loading";
 
 export default function Teacher() {
     const [teacher, setTeacher] = useState<Customer[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReload, setIsReload] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
     const [form] = Form.useForm();
     
     useEffect(() => {
@@ -20,9 +22,10 @@ export default function Teacher() {
     }, [isReload])
     
     const getTeachers = async () => {
-        var response = await http.get<CustomerResponse>("/customers?customerType=TEACHER");
+        const response = await http.get<CustomerResponse>("/customers?customerType=TEACHER");
         if(response.status === 200){
             setTeacher(response.payload.data);
+            setLoading(false);
         }
     }
 
@@ -41,7 +44,7 @@ export default function Teacher() {
   return (
     <div className="flex h-screen overflow-hidden">
         <LeftMenu />
-        <div className="flex-1 px-24 py-4 overflow-y-auto">
+        {loading ? <Loading /> : <div className="flex-1 px-24 py-4 overflow-y-auto">
             <div className="text-large-bold">Giáo viên</div>
             <div className="flex justify-between">
               <div></div>
@@ -57,7 +60,7 @@ export default function Teacher() {
               </div>
             </div>
             <ModalForm title={"Thêm mới giáo viên"} confirmText={"Tạo"} handleOk={handleOk} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} />
-        </div>
+        </div>}
 
         
     </div>

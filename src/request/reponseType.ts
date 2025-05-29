@@ -1,38 +1,44 @@
-import { Attendance, ClassType, Customer, Lesson, Menu, Schedule, ShuttleSchedule } from "./model";
+import { Attendance, AttendanceDriver, ClassType, Customer, Lesson, Menu, Schedule, ShuttleSchedule } from "./model";
 
 export type CustomerResponse = {
     data: Array<Customer>;
-    pagination: Object
+    pagination: object
   };
 
 export type CustomerDetailResponse = Customer;
 
 export type ClassResponse = {
     data: Array<ClassType>;
-    pagination: Object
+    pagination: object
 };
 
 export type LessonResponse = {
   data: Array<Lesson>;
-  pagination: Object
+  pagination: object
 };
 
 export type AttendanceResponse = {
   data: Array<Attendance>;
-  pagination: Object
+  pagination: object
 };
 
 export type ScheduleResponse = {
   data: Array<Schedule>;
-  pagination: Object
+  pagination: object
 };
 
 export type ShuttleScheduleResponse = {
   data: Array<ShuttleSchedule>;
-  pagination: Object
+  pagination: object
 };
 
 export type MenuResponse = {
   data: Array<Menu>;
-  pagination: Object
+  pagination: object
 };
+
+export type AttendanceDriverResponse = {
+  data: Array<AttendanceDriver>;
+  pagination: object
+};
+

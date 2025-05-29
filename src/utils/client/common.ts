@@ -1,9 +1,5 @@
 import { toast } from 'react-toastify';
 
-type ErrorCodeMap = {
-  [key: string]: string;
-};
-
 
 export const handleErrorCode = (error: any) => {
   const errorMessage = error?.code || error?.message || error?.error || "Có lỗi xảy ra";

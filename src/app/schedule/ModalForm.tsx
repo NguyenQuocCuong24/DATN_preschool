@@ -2,8 +2,8 @@ import { Button, Form, FormInstance, Input, Modal } from "antd";
 import { CircleX } from 'lucide-react';
 
 type ModalProps = {
-    title: String;
-    confirmText: String;
+    title: string;
+    confirmText: string;
     handleOk: () => void; 
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;

@@ -26,7 +26,7 @@ export default function TeacherDetail() {
     }, [customerId])
 
     const getCustomer = async () => {
-        var response = await http.get<CustomerDetailResponse>(`/customers/${customerId}`);
+        const response = await http.get<CustomerDetailResponse>(`/customers/${customerId}`);
         if(response.status === 200){
             console.log(response.payload);
             

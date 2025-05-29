@@ -1,10 +1,10 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 export const convertToDateTime = (text: string) => {
     return new Date(text).toLocaleString("vi-VN");
 }
 
 export const convertToDate = (text: string) => {
-    if(text == null) return new Date();
+    if(text == null) return new Date().toLocaleDateString("vi-VN");
     return new Date(text).toLocaleDateString("vi-VN");
 }
 
@@ -34,3 +34,10 @@ export function getStartOfWeek(date = new Date()) {
     start.setHours(0, 0, 0, 0); 
     return start;
   }
+
+export function getStartOfMonth(date: Dayjs){
+    return  date.startOf('month').format('YYYY-MM-DD');
+}
+export function getEndOfMonth(date: Dayjs){
+    return  date.endOf('month').format('YYYY-MM-DD');
+}

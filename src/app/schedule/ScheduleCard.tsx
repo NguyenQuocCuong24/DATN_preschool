@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import ModalForm from './ModalForm';
 import RouteSteps from './RouteSteps';
+import { isAdmin } from '@/src/utils/userInfo';
 
 
 type TeacherCardProps = {
@@ -17,7 +18,7 @@ type TeacherCardProps = {
 const prefix = "/schedules"
 
 const ScheduleCard = (props: TeacherCardProps) => {
-    const {schedule, index, isReload, setIsReload} = props;
+    const {schedule, isReload, setIsReload} = props;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
     
@@ -53,13 +54,14 @@ const ScheduleCard = (props: TeacherCardProps) => {
                 <Link href={`/schedule/signup/${schedule.id}`}>
                     <button className="cursor-pointer px-3 py-1 rounded-md border border-gray-300 font-medium text-sm">Đăng ký</button>
                 </Link>
-                <button onClick={handleUpdate} className="cursor-pointer px-3 py-1 rounded-md text-white bg-button-primary hover:bg-indigo-700 text-sm">
-                    Sửa
-                </button>
-                <Popconfirm title="Bạn có muốn xoá?" onConfirm={onDelete} okText="Có" cancelText="Không" >
-                    <button className="cursor-pointer bg-red-500 color px-3 py-1 rounded-md border border-gray-300 font-medium text-sm">Xoá</button>
-
-                </Popconfirm>
+                {isAdmin() && <div>
+                    <button onClick={handleUpdate} className="cursor-pointer mr-2 px-3 py-1 rounded-md text-white bg-button-primary hover:bg-indigo-700 text-sm">
+                        Sửa
+                    </button>
+                    <Popconfirm title="Bạn có muốn xoá?" onConfirm={onDelete} okText="Có" cancelText="Không" >
+                        <button className="cursor-pointer bg-red-500 color px-3 py-1 rounded-md border border-gray-300 font-medium text-sm">Xoá</button>
+                    </Popconfirm>
+                </div>}
             </div>
             <ModalForm title={"Sửa giáo viên"} confirmText={"Sửa"} handleOk={handleOk} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} />
     </div>

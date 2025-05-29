@@ -3,8 +3,8 @@ import { Customer } from '@/src/request/model';
 import { Form, FormInstance, Input, Modal, Select } from "antd";
 
 type ModalProps = {
-    title: String;
-    confirmText: String;
+    title: string;
+    confirmText: string;
     handleOk: () => void; 
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;

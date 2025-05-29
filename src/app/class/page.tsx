@@ -8,12 +8,14 @@ import { useEffect, useState } from "react";
 import LeftMenu from "../../components/sidebar/leftMenu";
 import ModalForm from "./ModalForm";
 import CustomTable from "./Table";
+import Loading from "@/src/components/loading";
 
 const prefixApi = '/classes';
 export default function Class() {
     const [classes, setClasses] = useState<ClassType[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReload, setIsReload] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
     const [form] = Form.useForm();
     const [teacher, setTeacher] = useState<Customer[]>([]);
         
@@ -22,7 +24,7 @@ export default function Class() {
     }, [])
         
     const getTeachers = async () => {
-        var response = await http.get<CustomerResponse>("/customers?customerType=TEACHER");
+        const response = await http.get<CustomerResponse>("/customers?customerType=TEACHER");
         if(response.status === 200){
             setTeacher(response.payload.data);
         }
@@ -33,9 +35,10 @@ export default function Class() {
     }, [isReload])
     
     const getAllClasses = async () => {
-        var response = await http.get<ClassResponse>(prefixApi);
+        const response = await http.get<ClassResponse>(prefixApi);
         if(response.status === 200){
           setClasses(response.payload.data);
+          setLoading(false);
         }
     }
 
@@ -45,8 +48,8 @@ export default function Class() {
         http.post<ClassType>(prefixApi, {...values}).then(async (record) => {
           const promises = values.teacherIdList.map((customerId: number) => createClassTeacher(record.payload.id, customerId));
           await Promise.all(promises);
-          setIsReload(!isReload)
         });
+        setIsReload(!isReload)
         setIsModalOpen(false);
         form.resetFields();
       })
@@ -63,7 +66,7 @@ export default function Class() {
   return (
     <div className="flex h-screen overflow-hidden">
         <LeftMenu />
-        <div className="flex-1 px-24 py-4 overflow-y-auto">
+        {loading ? <Loading /> : <div className="flex-1 px-24 py-4 overflow-y-auto">
             <div className="text-large-bold">Danh sách lớp học</div>
             <div className="flex justify-between">
               <div></div>
@@ -74,7 +77,7 @@ export default function Class() {
             </div>
             {teacher && <ModalForm title={"Thêm mới lớp học"} confirmText={"Tạo"} handleOk={handleOk}
                isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} teachers={teacher}/>}
-        </div>
+        </div>}
 
         
     </div>

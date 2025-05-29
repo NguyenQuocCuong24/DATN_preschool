@@ -2,13 +2,15 @@
 import { jwtDecode } from 'jwt-decode';
 
 export const getCustomerId = () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        try {
-            const decoded = jwtDecode(token);
-            return decoded.customerId;
-        } catch (e) {
-            console.log('Token không hợp lệ');
+    if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                return decoded.customerId;
+            } catch (e) {
+                console.log('Token không hợp lệ', e);
+            }
         }
     }
     return 0;
@@ -21,10 +23,16 @@ export const getCustomerInfo = () => {
             const decoded = jwtDecode(token);
             return decoded;
         } catch (e) {
-            console.log('Token không hợp lệ');
+            console.log('Token không hợp lệ', e);
         }
     }
-    return {classId: 0, customerId: 0};
+    return  {
+        customerId: 0,
+        customerType: "CUSTOMER",
+        fullName: "",
+        userId: 0,
+        classId: 0
+    };
 }
 
 export const isAdmin = () => {
@@ -34,7 +42,20 @@ export const isAdmin = () => {
             const decoded = jwtDecode(token);
             return decoded.customerType === 'ADMIN';
         } catch (e) {
-            console.log('Token không hợp lệ');
+            console.log('Token không hợp lệ', e);
+        }
+    }
+    return false;
+}
+
+export const isTeacher = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const decoded = jwtDecode(token);
+            return decoded.customerType === 'TEACHER';
+        } catch (e) {
+            console.log('Token không hợp lệ', e);
         }
     }
     return false;
@@ -47,7 +68,7 @@ export const isCustomer = () => {
             const decoded = jwtDecode(token);
             return decoded.customerType === 'CUSTOMER';
         } catch (e) {
-            console.log('Token không hợp lệ');
+            console.log('Token không hợp lệ', e);
         }
     }
     return false;

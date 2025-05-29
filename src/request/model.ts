@@ -20,6 +20,8 @@ export type Customer = {
   description: string;
   birthDate: string;
   address: string;
+  rank: number;
+  salary: number;
 };
 
 export type Lesson = {
@@ -61,6 +63,8 @@ export type ShuttleSchedule = {
   pickUpAddress: string;
   dropOffAddress: string;
   startTime: string;
+  customerName: string;
+  className: string;
 };
 
 export type Menu = {
@@ -70,4 +74,28 @@ export type Menu = {
   startTime: string;
   type: string;
   image: string;
+};
+
+export type AttendanceDriver = {
+  id: number;
+  scheduleId: number;
+  startTime: string;
+  customerId: number;
+  status: string;
+  endTime: string;
+};
+
+
+export type Bill = {
+  id: number;
+  customerId: number;
+  detail: Detail;
+  date: string;
+  status: string;
+  customerName: string;
+  isSent: boolean;
+};
+
+type Detail = {
+  [key: string]: number;
 };

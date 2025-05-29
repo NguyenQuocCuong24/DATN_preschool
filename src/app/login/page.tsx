@@ -1,80 +1,93 @@
 "use client";
 import http from "@/src/request/httpConfig";
-import { Button, Card, Checkbox, Form, Input, Typography } from "antd";
+import { Button, Card, Form, Input, Typography } from "antd";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { ToastContainer } from "react-toastify";
-import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
+
 const { Title } = Typography;
 
 const Login: React.FC = () => {
-    const router = useRouter()
+  const router = useRouter();
+
   const onFinish = async (values: { username: string; password: string }) => {
-    await http.post("/auth", values)
+    await http
+      .post("/auth", values)
       .then((response) => {
-        if(response.status == 200){
-            const payload = response.payload as { token: string };
-            const token = payload.token;
-            localStorage.setItem("token", token);
-            document.cookie = `token=${token}; path=/; secure; SameSite=Lax`;
-            router.push("/");
-        } 
+        if (response.status === 200) {
+          const payload = response.payload as { token: string };
+          const token = payload.token;
+          localStorage.setItem("token", token);
+          document.cookie = `token=${token}; path=/; secure; SameSite=Lax`;
+          localStorage.setItem("username", values.username);
+          router.push("/home");
+        }
       })
-      .catch(info => {
+      .catch((info) => {
         console.log("Validate Failed:", info);
       });
   };
 
   return (
     <div
+      className="w-screen h-screen bg-cover bg-center bg-no-repeat"
       style={{
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f0f2f5",
-        padding: "24px",
+        backgroundImage: "url('/login.png')"
       }}
     >
-    <ToastContainer />
-      <Card >
-        <Title level={3} style={{ textAlign: "center" }}>
-          Đăng nhập
+      <ToastContainer />
+      <Card
+        style={{
+          width: 400,
+          borderRadius: 16,
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          padding: "24px",
+          backgroundColor: "#fff",
+        }}
+      >
+        <Title level={3} style={{ textAlign: "center", marginBottom: 24 }}>
+          Đăng nhập hệ thống<br />quản lý mầm non
         </Title>
         <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            autoComplete="off"
+          name="basic"
+          layout="vertical"
+          initialValues={{ remember: true, username: typeof window !== "undefined" ? localStorage.getItem("username") || "" : "" }}
+          onFinish={onFinish}
+          autoComplete="off"
         >
-            <Form.Item
-            label="Username"
+          <Form.Item
+            label="Tên đăng nhập"
             name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-            >
-            <Input />
-            </Form.Item>
+            rules={[
+              { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+            ]}
+          >
+            <Input placeholder="Nhập tên đăng nhập" />
+          </Form.Item>
 
-            <Form.Item
-            label="Password"
+          <Form.Item
+            label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
+          >
+            <Input.Password placeholder="Nhập mật khẩu" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ width: "100%", borderRadius: 8 }}
             >
-            <Input.Password />
-            </Form.Item>
-
-            <Form.Item name="remember" valuePropName="checked" label={null}>
-            <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <Form.Item label={null}>
-            <Button type="primary" htmlType="submit">
-                Submit
+              Đăng nhập
             </Button>
-            </Form.Item>
-            </Form>
+          </Form.Item>
+        </Form>
       </Card>
     </div>
   );

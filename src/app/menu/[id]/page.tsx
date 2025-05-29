@@ -3,11 +3,12 @@ import LeftMenu from '@/src/components/sidebar/leftMenu';
 import http from '@/src/request/httpConfig';
 import { Menu } from '@/src/request/model';
 import { MenuResponse } from '@/src/request/reponseType';
+import { isAdmin } from '@/src/utils/userInfo';
 import { CameraOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Card, Image, List, Tag, Typography, Upload, message } from 'antd';
+import { Button, Card, Image, List, Tag, Typography, Upload } from 'antd';
 import type { RcFile, UploadChangeParam } from 'antd/es/upload';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 const MEAL_TYPE: { [key: string]: string } = {
   LUNCH: "Bữa trưa",
@@ -40,7 +41,7 @@ export default function MenuDetail() {
     }, [reload])
     
     const getMenus = async () => {
-        var response = await http.get<MenuResponse>(`/menus?fromDate=${date}&toDate=${date}`);
+        const response = await http.get<MenuResponse>(`/menus?fromDate=${date}&toDate=${date}`);
         if(response.status === 200){
             setData(response.payload.data);
         }
@@ -60,8 +61,7 @@ export default function MenuDetail() {
   const handleUpload = async (index: number) => {
     try {
         await uploadImage(fileList[index]).then(async response => {
-            console.log(response.path);
-            var record = data[index];
+            const record = data[index];
             const body = {...record, image: response.path}
             await http.post<Menu>("/menus", body);
             setReload(!reload);
@@ -72,11 +72,15 @@ export default function MenuDetail() {
             return rest;
         });
     } catch (err) {
+        console.log(err);
+        
     }
     setFileList([]);
   };
 
   return (
+        <Suspense fallback={<div>Loading...</div>}>
+    
         <div className="flex h-screen overflow-hidden">
             <LeftMenu />
             <div className="flex-1 px-24 py-4 overflow-y-auto">
@@ -121,7 +125,7 @@ export default function MenuDetail() {
                                                 },
                                                 }}
                                             >
-                                                <Button icon={<CameraOutlined />}>Chọn ảnh khác</Button>
+                                                {isAdmin() && <Button icon={<CameraOutlined />}>Chọn ảnh khác</Button>}
                                             </Upload>
                                         </div>
                                     :
@@ -158,7 +162,7 @@ export default function MenuDetail() {
                                                 },
                                                 }}
                                             >
-                                                <Button icon={<CameraOutlined />}>Chọn ảnh từ máy ảnh</Button>
+                                                {<Button disabled={!isAdmin()} icon={<CameraOutlined />}>Chọn ảnh từ máy ảnh</Button>}
                                             </Upload>
                                         }
 
@@ -167,7 +171,7 @@ export default function MenuDetail() {
                                                 type="primary"
                                                 className="mt-4"
                                                 onClick={() => handleUpload(key)}
-                                                disabled={!fileList[key]}
+                                                disabled={!fileList[key] || !isAdmin()}
                                                 icon={<UploadOutlined />}
                                                 >
                                                     Tải ảnh lên
@@ -207,6 +211,7 @@ export default function MenuDetail() {
                     })}
                 </div>
             </div>
+            </Suspense>
         );
 };
 

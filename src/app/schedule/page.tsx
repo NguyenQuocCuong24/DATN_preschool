@@ -9,6 +9,7 @@ import { Schedule } from "../../request/model";
 import { ScheduleResponse } from "../../request/reponseType";
 import ModalForm from './ModalForm';
 import ScheduleCard from './ScheduleCard';
+import Loading from '@/src/components/loading';
 
 const prefix = "/schedules"
 
@@ -16,6 +17,7 @@ const SchedulePage = () => {
     const [schedules, setSchedules] = useState<Schedule[]>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isReload, setIsReload] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
     const [form] = Form.useForm();
 
 
@@ -24,9 +26,10 @@ const SchedulePage = () => {
     }, [isReload])
 
     const getAllSchedules = async () => {
-        var response = await http.get<ScheduleResponse>(`${prefix}`);
+        const response = await http.get<ScheduleResponse>(`${prefix}`);
         if(response.status === 200){
             setSchedules(response.payload.data);
+            setLoading(false);
         }
     }
 
@@ -45,7 +48,7 @@ const SchedulePage = () => {
     return (
         <div className="flex h-screen overflow-hidden">
         <LeftMenu />
-        <div className="flex-1 px-24 py-4 overflow-y-auto">
+        {loading ? <Loading /> : <div className="flex-1 px-24 py-4 overflow-y-auto">
             <div className="text-large-bold">Lịch trình</div>
             <div className="flex justify-between">
               <div></div>
@@ -63,7 +66,7 @@ const SchedulePage = () => {
                 </div>
             </div>
             <ModalForm title={"Thêm lịch trình mới"} confirmText={"Tạo"} handleOk={handleOk} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} />
-        </div>
+        </div>}
 
         
     </div>

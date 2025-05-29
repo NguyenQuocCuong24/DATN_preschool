@@ -6,15 +6,15 @@ import viVN from "antd/locale/vi_VN";
 import { Dayjs } from 'dayjs';
 import { ClipboardList, Table2, Users, Users2 } from "lucide-react";
 import React, { useEffect, useState } from 'react';
-import Loading from "../components/loading";
-import LeftMenu from "../components/sidebar/leftMenu";
-import http from "../request/httpConfig";
 
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
-import { MenuResponse } from '../request/reponseType';
-import { Menu } from '../request/model';
-import { MEAL_TYPE } from '../utils/config';
+import { Menu } from '@/src/request/model';
+import http from '@/src/request/httpConfig';
+import { MenuResponse } from '@/src/request/reponseType';
+import LeftMenu from '@/src/components/sidebar/leftMenu';
+import Loading from '@/src/components/loading';
+import { MEAL_TYPE } from '@/src/utils/config';
 dayjs.locale("vi");
 
 type OverViewData = {
@@ -45,7 +45,7 @@ export default function Home() {
   }, [currentDate]);
 
   const getOverviewData = async () => {
-      var response = await http.get("/overviews");
+      const response = await http.get("/overviews");
       if(response.status === 200){
           setData(response?.payload as OverViewData);
           setLoading(false);
@@ -53,7 +53,7 @@ export default function Home() {
   }
 
   const getAllMenus = async () => {
-    var response = await http.get<MenuResponse>(`/menus?fromDate=${currentDate}&toDate=${currentDate}`);
+    const response = await http.get<MenuResponse>(`/menus?fromDate=${currentDate}&toDate=${currentDate}`);
     if(response.status === 200){
       const data = response.payload.data;
       setMenu(data);
@@ -64,7 +64,7 @@ export default function Home() {
     setCurrentDate(value.format('YYYY-MM-DD'));
   }
 
-  const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
+  const onPanelChange = (value: Dayjs) => {
     setCurrentDate(value.format('YYYY-MM-DD'));
   };
 
@@ -167,7 +167,9 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
         </div>
+
           }
       </div>
     </div>

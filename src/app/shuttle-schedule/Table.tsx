@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Schedule, ShuttleSchedule } from '../../request/model';
 import ModalForm from './ModalForm';
+import { isAdmin } from '@/src/utils/userInfo';
+import dayjs from 'dayjs';
 
 type TableProps = {
   originData: ShuttleSchedule[];
@@ -23,6 +25,7 @@ const CustomTable = (props: TableProps) => {
   const [form] = Form.useForm();
   const [data, setData] = useState<ShuttleSchedule[]>(originData);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(dayjs());
 
   useEffect(() => {
     setData(originData);
@@ -40,7 +43,9 @@ const CustomTable = (props: TableProps) => {
   const handleOk = () => {
     form.validateFields()
       .then(values => {
-        http.patch<ShuttleSchedule>(`${prefix}/${form.getFieldValue("id")}`, values).then(() => {
+        console.log("22222: ", selectedDate);
+        
+        http.patch<ShuttleSchedule>(`${prefix}/${form.getFieldValue("id")}`, {...values, startTime: selectedDate.format("YYYY-MM-DD")}).then(() => {
             setIsModalOpen(false);
             form.resetFields();
             setIsReload(!isReload);
@@ -66,6 +71,12 @@ const CustomTable = (props: TableProps) => {
       key: 'customerName',
       width: '15%',
       editable: true,
+    },
+    {
+      title: 'Lớp',
+      dataIndex: 'className',
+      key: 'className',
+      width: '10%',
     },
     {
       title: 'Lịch trình',
@@ -99,24 +110,31 @@ const CustomTable = (props: TableProps) => {
       width: '20%',
       dataIndex: 'detail',
       render: (_: any, record: ShuttleSchedule) => {
-        
-        return (
-          <div className='flex justify-between'>
-            <Link href={`/student/${record.id}`}>
-              <Typography.Link>
-                Chi tiết
+        if(isAdmin()){
+          return (
+            <div className='flex justify-between'>
+              <Link href={`/student/${record.id}`}>
+                <Typography.Link>
+                  Chi tiết
+                </Typography.Link>
+              </Link>
+              <div>|</div>
+              <Typography.Link onClick={() => handleUpdate(record)}>
+                Sửa
               </Typography.Link>
-            </Link>
-            <div>|</div>
-            <Typography.Link onClick={() => handleUpdate(record)}>
-              Sửa
-            </Typography.Link>
-            <div>|</div>
-            <Popconfirm title="Bạn có muốn xoá?" onConfirm={() => onDelete(record)} okText="Có" cancelText="Không">
-              <a>Xoá</a>
-            </Popconfirm>
-          </div>
-            
+              <div>|</div>
+              <Popconfirm title="Bạn có muốn xoá?" onConfirm={() => onDelete(record)} okText="Có" cancelText="Không">
+                <a>Xoá</a>
+              </Popconfirm>
+            </div>
+          )
+        }
+        return (
+          <Link href={`/student/${record.id}`}>
+                <Typography.Link>
+                  Chi tiết
+                </Typography.Link>
+              </Link>
         )
       },
     },
@@ -135,7 +153,7 @@ const CustomTable = (props: TableProps) => {
           />
         </Form>
         <ModalForm title={"Sửa học sinh"} confirmText={"Sửa"} handleOk={handleOk} 
-               isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} schedules={schedules} scheduleId={scheduleId}/>
+               isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} schedules={schedules} scheduleId={scheduleId} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
       </div>
   );
 };

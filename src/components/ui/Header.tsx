@@ -48,7 +48,7 @@ export default function Header() {
     }
 
     const mainLinks = [
-        { label: 'TRANG CHỦ', href: '/home', type: '' },
+        { label: 'TRANG CHỦ', href: '/', type: '' },
         { label: 'TÍNH NĂNG', href: '#', type: 'feature' },
         { label: 'SỔ SÁCH BÁN TRÚ', href: '/report' },
         { label: 'ĐĂNG KÝ', href: '/register' },
@@ -58,7 +58,7 @@ export default function Header() {
         { label: 'Quản lý học sinh', href: '/student_management' },
         { label: 'Tính lương giáo viên', href: '/payroll-teacher' },
         { label: 'Khẩu phần dinh dưỡng', href: '/nutrition' },
-        { label: 'Quản lý thu chi', href: '/bill' },
+        { label: 'Quản lý thu chi', href: '/bill_web' },
         { label: 'Tin nhắn', href: '/messaging' },
     ]
 
@@ -67,7 +67,7 @@ export default function Header() {
             <div className="container mx-auto flex flex-col mb-4">
                 <div className="container flex items-center justify-between mt-4">
                     {/* Logo */}
-                    <Link href="/home">
+                    <Link href="/home_web">
                         <Image
                             src="/assets/images/logo-school.png"
                             alt="Logo"
@@ -123,9 +123,11 @@ export default function Header() {
                                 </button>
                             </MenuItem>
                             <MenuItem>
-                                <button className="w-full text-left border border-blue-500 text-blue-500 px-2 py-1 rounded hover:bg-blue-100 text-sm font-semibold">
-                                    ĐĂNG NHẬP
-                                </button>
+                                <Link href={"/login"}>
+                                    <button className="cursor-pointer w-full text-left border border-blue-500 text-blue-500 px-2 py-1 rounded hover:bg-blue-100 text-sm font-semibold">
+                                        ĐĂNG NHẬP
+                                    </button>
+                                </Link>
                             </MenuItem>
                         </Menu>
                     </div>
@@ -210,9 +212,11 @@ export default function Header() {
                         <button className="border border-blue-500 text-blue-500 px-3 py-1 rounded hover:bg-blue-50 text-sm font-semibold">
                             HỖ TRỢ
                         </button>
-                        <button className="border border-blue-500 text-blue-500 px-3 py-1 rounded hover:bg-blue-50 text-sm font-semibold">
-                            ĐĂNG NHẬP
-                        </button>
+                        <Link href={"/login"}>
+                            <button className="cursor-pointer border border-blue-500 text-blue-500 px-3 py-1 rounded hover:bg-blue-50 text-sm font-semibold">
+                                ĐĂNG NHẬP
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

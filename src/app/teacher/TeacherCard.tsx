@@ -7,6 +7,7 @@ import { Calendar, Mail, Phone } from "lucide-react";
 import { useState } from 'react';
 import ModalForm from './ModalForm';
 import Link from 'next/link';
+import { isAdmin } from '@/src/utils/userInfo';
 
 
 type TeacherCardProps = {
@@ -72,13 +73,14 @@ const TeacherCard = (props: TeacherCardProps) => {
                 <Link href={`/teacher/${teacher.id}`}>
                     <button className="cursor-pointer px-3 py-1 rounded-md border border-gray-300 font-medium text-sm">Chi tiết</button>
                 </Link>
-                <button onClick={handleUpdate} className="cursor-pointer px-3 py-1 rounded-md text-white bg-button-primary hover:bg-indigo-700 text-sm">
-                    Sửa
-                </button>
-                <Popconfirm title="Bạn có muốn xoá?" onConfirm={onDelete} okText="Có" cancelText="Không" >
-                    <button className="cursor-pointer bg-red-500 color px-3 py-1 rounded-md border border-gray-300 font-medium text-sm">Xoá</button>
-
-                </Popconfirm>
+                {isAdmin() && <div>
+                    <button onClick={handleUpdate} className="cursor-pointer mr-2 px-3 py-1 rounded-md text-white bg-button-primary hover:bg-indigo-700 text-sm">
+                        Sửa
+                    </button>
+                    <Popconfirm title="Bạn có muốn xoá?" onConfirm={onDelete} okText="Có" cancelText="Không" >
+                        <button className="cursor-pointer bg-red-500 color px-3 py-1 rounded-md border border-gray-300 font-medium text-sm">Xoá</button>
+                    </Popconfirm>
+                </div>}
             </div>
             <ModalForm title={"Sửa giáo viên"} confirmText={"Sửa"} handleOk={handleOk} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} form={form} />
     </div>

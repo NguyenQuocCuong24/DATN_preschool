@@ -26,10 +26,8 @@ export default function TeacherDetail() {
     }, [customerId])
 
     const getCustomer = async () => {
-        var response = await http.get<CustomerDetailResponse>(`/customers/${customerId}`);
+        const response = await http.get<CustomerDetailResponse>(`/customers/${customerId}`);
         if(response.status === 200){
-            console.log(response.payload);
-            
             setTeacher(response.payload);
         }
     }
@@ -67,7 +65,7 @@ export default function TeacherDetail() {
                         <Descriptions.Item label={<span className="flex items-center gap-2"><Clock size={16} /> Ngày tạo</span>}>
                             {dayjs(teacher.createdAt).format("HH:mm DD/MM/YYYY")}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span className="flex items-center gap-2"><FileType size={16} /> Mô tả</span>}>
+                        <Descriptions.Item label={<span className="flex items-center gap-2"><FileType size={16} />Phụ huynh</span>}>
                             {teacher.description}
                         </Descriptions.Item>
                         </Descriptions>

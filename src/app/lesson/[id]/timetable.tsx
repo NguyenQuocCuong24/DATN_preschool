@@ -27,7 +27,7 @@ const TimeTable = () => {
   const getEvents = async () => {
     const toDate = new Date();
     toDate.setDate(selectedDate.getDate() + 7)
-    var response = await http.get<LessonResponse>(`${prefixApi}?classId=${classId}&fromDate=${selectedDate}&toDate=${toDate}`);
+    const response = await http.get<LessonResponse>(`${prefixApi}?classId=${classId}&fromDate=${selectedDate}&toDate=${toDate}`);
     const data = response.payload.data;
     const result = data.map((item) => ({
       event_id: item.id,
@@ -49,7 +49,7 @@ const TimeTable = () => {
   };
 
   const handleDelete = async (deleteId: string | number) => {
-    var response = await http.delete<LessonResponse>(`${prefixApi}/${deleteId}`);
+    const response = await http.delete<LessonResponse>(`${prefixApi}/${deleteId}`);
     if(response.status == 200){
       setReload(!reload);
     }

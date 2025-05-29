@@ -4,6 +4,7 @@ import { ClassTeacher, ClassType, Customer } from '@/src/request/model';
 import { Form, Popconfirm, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import ModalForm from './ModalForm';
+import { isAdmin } from '@/src/utils/userInfo';
 
 const prefixApi = '/classes';
 
@@ -100,7 +101,7 @@ const CustomTable = (props: TeacherTableProps) => {
       dataIndex: 'teacher',
       key: 'teacher',
       render: (_: any, record: ClassType) => {
-        var teacherName = record.teachers.filter(e => e.customerName != null).map(item => item.customerName).join(", ");
+        const teacherName = record.teachers.filter(e => e.customerName != null).map(item => item.customerName).join(", ");
         return (
           <div>{teacherName}</div>
         )
@@ -111,27 +112,29 @@ const CustomTable = (props: TeacherTableProps) => {
       width: '25%',
       dataIndex: 'delete',
       render: (_: any, record: ClassType) => {
-        return (
-          <div className='flex justify-between'>
+        if (isAdmin()) {
+          
+          return (
+            <div className='flex justify-between'>
             <Typography.Link href={`lesson/${record.id}`}>
               Xem lịch học
             </Typography.Link>
-            <div>|</div>
-            {/* <Link href={`/class/${record.id}`}>
-              <Typography.Link>
-                Chi tiết
-              </Typography.Link>
-            </Link> */}
-            {/* <div>|</div> */}
-            <Typography.Link onClick={() => handleUpdate(record)}>
-              Sửa
-            </Typography.Link>
-            <div>|</div>
-            <Popconfirm title="Bạn có muốn xoá?" onConfirm={() => onDelete(record)} okText="Có" cancelText="Không" >
-              <a>Xoá</a>
-            </Popconfirm>
+                <div>|</div>
+                <Typography.Link onClick={() => handleUpdate(record)}>
+                  Sửa
+                </Typography.Link>
+                <div>|</div>
+                <Popconfirm title="Bạn có muốn xoá?" onConfirm={() => onDelete(record)} okText="Có" cancelText="Không" >
+                  <a>Xoá</a>
+                </Popconfirm>
           </div>
         )
+      }
+      return (
+        <Typography.Link href={`lesson/${record.id}`}>
+          Xem lịch học
+        </Typography.Link>
+      )
       },
     },
   ];

@@ -8,7 +8,7 @@ import { ParamValue } from "next/dist/server/request/params";
 
 const CustomEditor = ({ scheduler, classId }: { scheduler: SchedulerHelpers, classId: ParamValue }) => {
   
-  var startTime = scheduler.state.start.value;
+  const startTime = scheduler.state.start.value;
   const [title, setTitle] = useState(scheduler.edited?.title || "");
   const [endTime, setEndTime] = useState(
     dayjs(startTime as Date).add(1, "hour")

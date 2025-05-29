@@ -3,8 +3,8 @@ import { DatePicker, Form, FormInstance, Input, Modal, Select } from "antd";
 import { ClassType } from '@/src/request/model';
 
 type ModalProps = {
-    title: String;
-    confirmText: String;
+    title: string;
+    confirmText: string;
     handleOk: () => void; 
     isModalOpen: boolean;
     setIsModalOpen: (value: boolean) => void;
@@ -32,13 +32,13 @@ const ModalForm = (props: ModalProps) => {
                   <Form.Item name="mobile" label="Số điện thoại" rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}>
                       <Input />
                   </Form.Item>
-                  <Form.Item name="email" label="Địa chỉ email" rules={[{ required: false }]}>
+                  <Form.Item name="email" label="Địa chỉ email" rules={[{ required: true, message: "Vui lòng nhập email" }]}>
                       <Input />
                   </Form.Item>
-                  <Form.Item name="address" label="Địa chỉ" rules={[{ required: false}]}>
+                  <Form.Item name="address" label="Địa chỉ" rules={[{ required: true, message: "Vui lòng nhập địa chỉ"}]}>
                       <Input />
                   </Form.Item>
-                  <Form.Item name="description" label="Mô tả" rules={[{ required: false}]}>
+                  <Form.Item name="description" label="Phụ huynh" rules={[{ required: true,message: "Vui lòng nhập phụ huynh"}]}>
                       <Input />
                   </Form.Item>
                   <Form.Item name="birthDate" label="Ngày sinh" rules={[{ required: true, message: "Vui lòng chọn ngày sinh" }]}>

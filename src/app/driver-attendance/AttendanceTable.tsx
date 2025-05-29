@@ -1,53 +1,55 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
-import { Button, Table } from "antd";
-import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from "@ant-design/icons";
-import { Attendance, Customer } from "@/src/request/model";
-import { AttendanceResponse, CustomerResponse } from "@/src/request/reponseType";
 import http from "@/src/request/httpConfig";
-import { ColumnsType } from "antd/es/table";
-import { Save } from "lucide-react";
+import { AttendanceDriver, ShuttleSchedule } from "@/src/request/model";
+import { AttendanceDriverResponse, ShuttleScheduleResponse } from "@/src/request/reponseType";
+import { ATTENDANCE_STATUS } from "@/src/utils/config";
+import { getEndOfMonth, getStartOfMonth } from "@/src/utils/datetime";
 import { isAdmin, isCustomer, isTeacher } from "@/src/utils/userInfo";
+import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from "@ant-design/icons";
+import { Button, Table } from "antd";
+import { ColumnsType } from "antd/es/table";
+import { Dayjs } from 'dayjs';
+import { Save } from "lucide-react";
+import { useEffect, useState } from "react";
 
-type AttendanceStatus = true | false | null;
+type AttendanceStatus = 'PICKED_UP' | 'DROPPED_OFF' | 'ABSENT';
 
 type AttendanceProps = {
-  classId: number;
-  lessonId: number;
+  scheduleId: number;
+  currentDate: Dayjs;
   search: string;
 };
 
 const AttendanceTable = (props: AttendanceProps) => {
-  const {classId, lessonId, search} = props;
-  const [studentsData, setStudentsData] = useState<Customer[]>([]);
+  const {scheduleId, currentDate, search} = props;
+  const [studentsData, setStudentsData] = useState<ShuttleSchedule[]>([]);
   const [isAttendanced, setIsAttendanced] = useState<boolean>(false)
   const [loadings, setLoadings] = useState<boolean>(false);
   
   const [attendance, setAttendance] = useState<Record<number, AttendanceStatus>>({});
   useEffect(() => {
     getAllStudents();
-  }, [classId])
+  }, [scheduleId])
 
   useEffect(() => {
     getAllAttendances();
-  }, [lessonId])
+  }, [scheduleId, currentDate])
 
   const getAllStudents = async () => {
-    const response = await http.get<CustomerResponse>(`/customers?customerType=CUSTOMER&classId=${classId}`);
+    const response = await http.get<ShuttleScheduleResponse>(`/shuttle-schedules?scheduleId=${scheduleId}&fromDate=${getStartOfMonth(currentDate)}&toDate=${getEndOfMonth(currentDate)}`);
     if(response.status === 200){
       setStudentsData(response.payload.data);
-      // setLoading(false);
     }
   }
 
   const getAllAttendances = async () => {
-    const response = await http.get<AttendanceResponse>(`/attendances?lessonId=${lessonId}`);
+    const response = await http.get<AttendanceDriverResponse>(`/attendance-drivers?scheduleId=${scheduleId}&fromDate=${currentDate.format("YYYY-MM-DD")}&toDate=${currentDate.format("YYYY-MM-DD")}`);
     if(response.status === 200){
       const data = response.payload.data;
       if(data.length > 0){
         const dataMap: Record<number, AttendanceStatus> = data.reduce((map, item) => {
-          map[item.customerId] = item.present;
+          map[item.customerId] = item.status as AttendanceStatus;
           return map;
         }, {} as Record<number, AttendanceStatus>);
         setAttendance(dataMap);
@@ -59,30 +61,37 @@ const AttendanceTable = (props: AttendanceProps) => {
     }
   }
   const handleMark = (id: number, status: AttendanceStatus) => {
-    if(isCustomer()) return;
+    if (isCustomer()) {
+      return;
+    }
     setAttendance((prev) => ({
       ...prev,
-      [id]: prev[id] === status ? null : status, 
+      [id]: status, 
     }));
   };
 
-  const presentList = Object.keys(attendance)
-    .filter((id) => attendance[Number(id)] === true)
+  const pickupList = Object.keys(attendance)
+    .filter((id) => attendance[Number(id)] === ATTENDANCE_STATUS.PICKED_UP)
     .map(Number);
-    
+  
+  const dropOffList = Object.keys(attendance)
+    .filter((id) => attendance[Number(id)] === ATTENDANCE_STATUS.DROPPED_OFF)
+    .map(Number);
 
   const absentList = Object.keys(attendance)
-    .filter((id) => attendance[Number(id)] === false)
+    .filter((id) => attendance[Number(id)] === ATTENDANCE_STATUS.ABSENT)
     .map(Number);
 
   const handleAttendance = async () => {
     setLoadings(true)
     const body = {
-      lessonId: lessonId,
-      "presentList": presentList,
-      "absentList": absentList
+      scheduleId: scheduleId,
+      startTime: currentDate.format("YYYY-MM-DD"),
+      pickUpList: pickupList,
+      dropOffList: dropOffList,
+      absentList: absentList
     }
-    await http.post<Attendance>("/attendances", body)
+    await http.post<AttendanceDriver>("/attendance-drivers", body)
       .then(() => {
         setIsAttendanced(true);
         setLoadings(false);
@@ -92,7 +101,7 @@ const AttendanceTable = (props: AttendanceProps) => {
       });
   };
 
-  const columns: ColumnsType<Customer> = [
+  const columns: ColumnsType<ShuttleSchedule> = [
       {
         title: 'STT',
         dataIndex: 'stt',
@@ -102,21 +111,21 @@ const AttendanceTable = (props: AttendanceProps) => {
       },
       {
         title: "Họ tên",
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "customerName",
+        key: "customerName",
         render: (_, record) => (
           <div className="font-medium">
-            {record.fullName}
+            {record.customerName}
           </div>
         ),
       },
       {
-        title: "Số điện thoại",
-        dataIndex: "mobile",
-        key: "mobile",
+        title: "Lớp học",
+        dataIndex: "className",
+        key: "className",
         render: (_, record) => (
           <div className="font-medium">
-            {record.mobile}
+            {record.className}
           </div>
         ),
       },
@@ -128,20 +137,30 @@ const AttendanceTable = (props: AttendanceProps) => {
         render: (_, record) => (
           <div className="flex justify-end space-x-2">
             <Button
-              type={attendance[record.id] === true ? "primary" : "default"}
+              type={attendance[record.id] === ATTENDANCE_STATUS.PICKED_UP ? "primary" : "default"}
               className={
-                attendance[record.id] === false ? "bg-green-500 border-green-500" : ""
+                attendance[record.id] === ATTENDANCE_STATUS.PICKED_UP ? "bg-green-500 border-green-500" : ""
               }
               icon={<CheckCircleOutlined />}
-              onClick={() => handleMark(record.id, true)}
+              onClick={() => handleMark(record.id, ATTENDANCE_STATUS.PICKED_UP)}
             >
-              Có mặt
+              Đã đón
             </Button>
             <Button
-              type={attendance[record.id] === false ? "primary" : "default"}
+              type={attendance[record.id] === ATTENDANCE_STATUS.DROPPED_OFF ? "primary" : "default"}
+              className={
+                attendance[record.id] === ATTENDANCE_STATUS.DROPPED_OFF ? "bg-green-500 border-green-500" : ""
+              }
+              icon={<CheckCircleOutlined />}
+              onClick={() => handleMark(record.id, ATTENDANCE_STATUS.DROPPED_OFF)}
+            >
+              Đã trả
+            </Button>
+            <Button
+              type={attendance[record.id] === ATTENDANCE_STATUS.ABSENT ? "primary" : "default"}
               danger
               icon={<CloseCircleOutlined />}
-              onClick={() => handleMark(record.id, false)}
+              onClick={() => handleMark(record.id, ATTENDANCE_STATUS.ABSENT)}
             >
               Vắng
             </Button>
@@ -162,7 +181,7 @@ const AttendanceTable = (props: AttendanceProps) => {
         </div>
         <Table
           dataSource={studentsData.filter((item) =>
-            item.fullName.toLowerCase().includes(search.toLowerCase())
+            item.customerName.toLowerCase().includes(search.toLowerCase())
           )}
           columns={columns}
           rowKey="id"

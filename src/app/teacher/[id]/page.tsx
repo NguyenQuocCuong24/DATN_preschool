@@ -7,14 +7,14 @@ import Avatar from "@/src/utils/Avatar";
 import { Card, CardContent } from "@mui/material";
 import { Descriptions } from "antd";
 import dayjs from "dayjs";
-import { BadgeInfo, Clock, FileType, Mail, MapPin, Phone, User } from "lucide-react";
+import { BadgeDollarSign, BadgeInfo, Clock, FileType, Mail, MapPin, Phone, ShieldHalf, User } from "lucide-react";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 
 const ROLE_MAP: Record<string, string> = {
     TEACHER: 'Giáo viên',
   };
-
+  
 export default function TeacherDetail() {
     const params = useParams();
     const customerId = params.id;
@@ -25,7 +25,7 @@ export default function TeacherDetail() {
     }, [customerId])
 
     const getCustomer = async () => {
-        var response = await http.get<CustomerDetailResponse>(`/customers/${customerId}`);
+        const response = await http.get<CustomerDetailResponse>(`/customers/${customerId}`);
         if(response.status === 200){
             console.log(response.payload);
             
@@ -65,6 +65,12 @@ export default function TeacherDetail() {
                         </Descriptions.Item>
                         <Descriptions.Item label={<span className="flex items-center gap-2"><Clock size={16} /> Ngày tạo</span>}>
                             {dayjs(teacher.createdAt).format("HH:mm DD/MM/YYYY")}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span className="flex items-center gap-2"><ShieldHalf size={16} /> Bậc lương</span>}>
+                            {teacher.rank}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span className="flex items-center gap-2"><BadgeDollarSign size={16} /> Mức lương</span>}>
+                            {teacher.salary}
                         </Descriptions.Item>
                         <Descriptions.Item label={<span className="flex items-center gap-2"><FileType size={16} /> Mô tả</span>}>
                             {teacher.description}

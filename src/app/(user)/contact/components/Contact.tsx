@@ -15,19 +15,19 @@ export default function Contact() {
                 </a>
             ),
         },
-        {
-            label: 'Website',
-            value: (
-                <a
-                    href="http://www.sc.edu.vn"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                >
-                    http://www.sc.edu.vn
-                </a>
-            ),
-        },
+        // {
+        //     label: 'Website',
+        //     value: (
+        //         <a
+        //             href="http://www.sc.edu.vn"
+        //             target="_blank"
+        //             rel="noopener noreferrer"
+        //             className="text-blue-600 hover:underline"
+        //         >
+        //             http://www.sc.edu.vn
+        //         </a>
+        //     ),
+        // },
     ];
 
     return (
